@@ -1,22 +1,46 @@
 1.
 
-<geradezahl>     <= ...
+<sign> <= [ - | + ]
+<ungerade> <= 1 | 3 | 5 | 7 | 9
+<gerade> <= 2 | 4 | 6 | 8 | 0
+<geradezahl> <= [<sign>] { <gerade> | <ungerade> } <gerade>
 
+---------------------------------------------------------------
 
 2.
 
-...
+Input   |   Derivation                      |   Valid?
++0          <sign> <gerade>                     true
+-24         <sign> <ziffer> <gerade>            true
++33         <sign> <ziffer> !                   false
+59          <ziffer> !                          false
+1244        <ziffer> <ziffer> <ziffer> <gerade> true
 
+---------------------------------------------------------------
 
 3.
 
-<x2ygemisch> <= ...
+<y> = Y Y
+<x> = X
+
+<x2ygemisch> <= <x> [ <x2ygemisch> ] <y> [<x2ygemisch] | <y> [ <x2ygemisch> ] <x> [ <x2ygemisch> ]
+
+---------------------------------------------------------------
 
 4.
 
-...
+<beispiel1> <= [ A ] [ B ]
+<beispiel2> <= [ A [ B ] ]
 
+shortest possible symbol that is valid for <beispiel1> but invalid for <beispiel2>:
+
+B
+
+---------------------------------------------------------------
 
 5.
 
-<doppelt> <= ...
+<x> <= X
+<y> <= Y Y
+
+<doppelt> <= [ <x> [ <doppelt> ] <y> ]
