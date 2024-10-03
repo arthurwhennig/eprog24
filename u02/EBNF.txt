@@ -1,17 +1,48 @@
 1.
 
-<pyramid> <- ...
+<leftzero> <- [0]
+<leftone> <- <leftzero> [1]
+<lefttwo> <- <leftone> [2]
+<leftthree> <- <lefttwo> [3]
+<leftfour> <- <leftthree> [4]
+<leftfive> <- <leftfour> [5]
+<leftsix> <- <leftfive> [6]
+<leftseven> <- <leftsix> [7]
+<lefteight> <- <leftseven> [8]
+<leftnine> <- <lefteight> [9]
+<rightzero> <- [0]
+<rightone> <- [1] <rightzero>
+<righttwo> <- [2] <rightone>
+<rightthree> <- [3] <righttwo>
+<rightfour> <- [4] <rightthree>
+<rightfive> <- [5] <rightfour>
+<rightsix> <- [6] <rightfive>
+<rightseven> <- [7] <rightsix>
+<righteight> <- [8] <rightseven>
+<rightnine> <- [9] <righteight>
 
+<pyramid> <- <leftnine> <rightnine>
 
 2.
 
-<digitSum> <- ...
+<even> <- 0 | 2 | 4 | 6 | 8
+<odd> <- 1 | 3 | 5 | 7 | 9
+
+<digitSum> <- <odd> <odd> <digitsum> | <odd> <digitsum> <odd> | <digitsum> <odd> <odd> | [<even>] [<digitsum>] [<even>]
 
 
 3.
 
-<xyz> <- ...
+<x> <- X | X { X }
+<y> <- Y
+<z> <- Z
+
+<xyz> <- [<xyz>] Z [<xyz>] | <y> [<xyz>] {<x>} [<xyz>] <y> | [<xyz>] Y [<xyz>]
 
 4.
 
-<term> <- ...
+<integers> <- 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | { <integers> }
+<variables> <- x | y | z
+<addition> <- +
+
+<term> <- <term> <addition> <term> | ( <term> <addition> <term> ) | {<integers>} | variables
