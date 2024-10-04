@@ -5,6 +5,8 @@
 <gerade> <= 2 | 4 | 6 | 8 | 0
 <geradezahl> <= [<sign>] { <gerade> | <ungerade> } <gerade>
 
+
+// super
 ---------------------------------------------------------------
 
 2.
@@ -16,6 +18,8 @@ Input   |   Derivation                      |   Valid?
 59          <ziffer> !                          false
 1244        <ziffer> <ziffer> <ziffer> <gerade> true
 
+// das ist nicht wie die Aufgabe gedacht war. Du musstest die Ableitungstabelle für 28 zeigen:
+// wir haben das in der Übungsstunde kurz behandelt, gucke dir am besten die Musterlösung mal an, dann erinnerst du dich schon.
 ---------------------------------------------------------------
 
 3.
@@ -24,6 +28,10 @@ Input   |   Derivation                      |   Valid?
 <x> = X
 
 <x2ygemisch> <= <x> [ <x2ygemisch> ] <y> [<x2ygemisch] | <y> [ <x2ygemisch> ] <x> [ <x2ygemisch> ]
+
+
+// der Gedanke müsste korrekt sein, aber achte darauf, klammern zu verwenden, um genau zu zeigen was du meinst:
+// deine Antwort mit (richtigen) Klammern:	<x2ygemisch> <= (<x> [ <x2ygemisch> ] <y> [<x2ygemisch]) | (<y> [ <x2ygemisch> ] <x> [ <x2ygemisch> ])
 
 ---------------------------------------------------------------
 
@@ -36,6 +44,7 @@ shortest possible symbol that is valid for <beispiel1> but invalid for <beispiel
 
 B
 
+//richtig
 ---------------------------------------------------------------
 
 5.
@@ -44,3 +53,8 @@ B
 <y> <= Y Y
 
 <doppelt> <= [ <x> [ <doppelt> ] <y> ]
+
+//richtig, du könntest Y und X auch einfach direkt reinschreiben:
+// <doppelt> <= [ X [ <doppelt> ] YY ]
+
+// die innere eckige klammer ist nicht notwendig, stimmt aber trotzdem.
