@@ -45,4 +45,4 @@
 <variables> <- x | y | z
 <addition> <- +
 
-<term> <- <term> <addition> <term> | ( <term> <addition> <term> ) | {<integers>} | variables
+<term> <- <term> <addition> <term> | "(" <term> <addition> <term> ")" | {<integers>} | variables
