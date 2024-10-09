@@ -6,13 +6,16 @@ public class SwissFlag {
     public static char EMPTY = ' ';
 
     public static void main(String[] args) {
-        swissFlag(7, 3);
+        swissFlag(12, 6);
 
-        swissFlag(15, 5);
+//        swissFlag(15, 5);
 
-        swissFlag(20, 7);
+//        swissFlag(20, 7);
     }
 
+    //sehr schöne Lösung :) cool dass du es grössenverstellbar gemacht hast
+    
+    
     public static void swissFlag(int a, int b) {
         int width = 7 * a - 1; // width should be odd
         horizontal(width);

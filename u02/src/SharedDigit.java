@@ -21,6 +21,8 @@ public class SharedDigit {
 		} else if (a2 == b1 || a2 == b2) {
 			r = a2;
 		}
+		
+		// richtig
 
 		// Der finale Wert von r wird ausgegeben
 		System.out.println("a: " + a + ", b: " + b + " --> r: " + r);

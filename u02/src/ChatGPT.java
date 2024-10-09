@@ -1,6 +1,6 @@
 import java.util.Random;
 import java.util.Scanner;
-
+// passt alles, auch schön elegant
 public class ChatGPT {
     public static String INVALID_REGEX = "[.&%^$£@!)({}\";|/+=!`~<>,?]";
 

@@ -24,3 +24,6 @@ public class Adder {
         return a + b;
     }
 }
+
+// nice, kannst auch System.out.print() verwenden,
+// wenn du die Antwort nicht in einer neuen Zeile schreiben willst
