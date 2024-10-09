@@ -1,5 +1,9 @@
 import java.util.Scanner;
 
+
+// die Aufgabenstellung war etwas anders gemeint, guck mal in die Musterlösung, ansonsten gut :)
+
+
 public class SumPattern {
 	public static void main(String[] args) {
 		// Aendern Sie die Werte um verschiedene Ausfuehrungen zu testen.

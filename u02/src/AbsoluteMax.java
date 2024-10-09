@@ -1,5 +1,7 @@
 import java.util.Scanner;
 
+//sieht gut aus
+
 public class AbsoluteMax {
 	
 	public static void main(String[] args) {
