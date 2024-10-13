@@ -26,6 +26,8 @@
 
 2.	
 // nicht ganz, 1212 wird nicht akzeptiert :(
+// sorry, hab es falsch gesehen. es stimmt doch, geht aber wesentlich kürzer.
+// nutz aber bitte klammern, damit klar wird, was du mit | meinst
 
 <even> <- 0 | 2 | 4 | 6 | 8
 <odd> <- 1 | 3 | 5 | 7 | 9
