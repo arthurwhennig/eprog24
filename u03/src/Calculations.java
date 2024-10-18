@@ -1,12 +1,11 @@
 
 public class Calculations {
 	public static boolean magic7(int a, int b) {
-		// TODO: Vervollstaendigen Sie den Code wie in der Aufgabenbeschreibung beschrieben
-		return false;
-	}
+        return (a + b) == 7 || a > b && a - b == 7 || a < b && b - a == 7;
+    }
 	
 	public static boolean fast12(int z) {
-		// TODO: Vervollstaendigen Sie den Code wie in der Aufgabenbeschreibung beschrieben
-		return false;
+		int remainder = z % 12;
+		return remainder <= 2 || remainder >= 10;
 	}
 }
