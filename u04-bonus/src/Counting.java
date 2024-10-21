@@ -16,18 +16,34 @@ public class Counting {
 	}
 	
 	public static boolean containsSubstringAt(String str, int position, String sub) {
-		// TODO
-		return false; 
+		// check range for edge cases
+		if (position < 0 || position >= str.length()) return false;
+		// go through each character in sub and compare with corresponding character from str
+		for (int i = 0; i < sub.length(); i++) {
+			if (str.charAt(position + i) != sub.charAt(i)) return false;
+		}
+		return true;
 	}
 	
 	public static int countSubstrings(String str, String sub) {
-		// TODO
-		return -1; 
+		int count = 0;
+		// go through str and apply containsSubstringAt for each i inside of bounds
+		for (int i = 0; i <= str.length() - sub.length(); i++) {
+			if (containsSubstringAt(str, i, sub)) count++;
+		}
+		return count;
 	}
 	
 	public static int countDisjointSubstrings(String str, String sub) {
-		// TODO
-		return -1; 
+		int count = 0;
+		// go through str and apply containsSubstringAt for each i inside of bounds and move i to the right
+		for (int i = 0; i <= str.length() - sub.length(); i++) {
+			if (containsSubstringAt(str, i, sub)) {
+				count++;
+				i += sub.length()-1;
+			};
+		}
+		return count;
 	}
 	
 	public static void testContainsSubstringAt(boolean expected, String str, int position, String sub) {

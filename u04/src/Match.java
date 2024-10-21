@@ -18,8 +18,27 @@ public class Match {
 	}
 	
 	public static int matchNumber(long A, int M) {
-		// TODO
-		return -1; 
+		// append three 0s to the left of A (which has size Math.log10(A) + 1)
+		int size = (int) Math.log10(A) + 4;
+		int[] ADigits = new int[size];
+		int[] MDigits = new int[3];
+		// fill up both digit arrays
+		for (int i = MDigits.length-1; i >= 0; i--) {
+			int lastDigit = M % 10;
+			MDigits[i] = lastDigit;
+			M /= 10;
+		}
+		for (int i = ADigits.length-1; i >= 0; i--) {
+			int lastDigit = (int) (A % 10);
+			ADigits[i] = lastDigit;
+			A /= 10;
+		}
+		// scan through the digit array of A and look for a match with M
+		for (int idx = ADigits.length-1; idx >= 2; idx--) {
+			int first = ADigits[idx], second = ADigits[idx-1], third = ADigits[idx-2];
+			if (first == MDigits[2] && second == MDigits[1] && third == MDigits[0]) return ADigits.length-1-idx;
+		}
+		return -1;
 	}
 
 }
