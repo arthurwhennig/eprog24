@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class WoerterRaten {
@@ -27,13 +28,28 @@ public class WoerterRaten {
      * Führt das Rate-Spiel einmal durch.
      */
     static void rateSpiel(String[] woerter) {
+        Scanner myConsole = new Scanner(System.in);
+        String wort = zufallsWort(woerter);
+        String hinweis = "";
+        int count = 0;
+
+        while (!hinweis.equals("ist")) {
+            System.out.println("Tipp?");
+            String tipp = myConsole.nextLine();
+            hinweis = hinweis(wort, tipp);
+            System.out.println("Das Wort " + hinweis + " \"" + tipp + "\"!");
+            count++;
+        }
+
+        System.out.println("Glückwunsch! Sie haben das Wort in nur " + count + (count == 1 ? " Frage" : " Fragen") + " erraten!");
     }
     
     /**
      * Wählt zufällig ein Wort aus dem "woerter"-Array aus und gibt es zurück.
      */
     static String zufallsWort(String[] woerter) {
-        return "";
+        int idx = new Random().nextInt(woerter.length);
+        return woerter[idx];
     }
     
     /**
@@ -42,6 +58,11 @@ public class WoerterRaten {
      * mit", "enthält" oder "enthält nicht".
      */
     static String hinweis(String wort, String tipp) {
-        return "";
+        if (wort.equals(tipp)) return "ist";
+        if (wort.startsWith(tipp) && wort.endsWith(tipp)) return "beginnt mit und endet mit";
+        if (wort.startsWith(tipp)) return "beginnt mit";
+        if (wort.endsWith(tipp)) return "endet mit";
+        if (wort.contains(tipp)) return "enthält";
+        return "enthält nicht";
     }
 }
