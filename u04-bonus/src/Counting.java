@@ -1,3 +1,5 @@
+package Counting;
+
 public class Counting {
 
 	public static void main(String[] args) {
@@ -13,6 +15,8 @@ public class Counting {
 		testCountDisjointSubstrings(1, "abcdcba", "abc");
 		testCountDisjointSubstrings(2, "abcdcba", "c");
 		testCountDisjointSubstrings(2, "0101010", "010");
+
+		System.out.println(containsSubstringAt("", 0, ""));
 	}
 	
 	public static boolean containsSubstringAt(String str, int position, String sub) {

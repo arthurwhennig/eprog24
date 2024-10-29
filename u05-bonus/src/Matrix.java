@@ -1,8 +1,34 @@
 public class Matrix {
 
     public static int countAssimilated(int[][] matrix) {
-        // TODO: Implementieren Sie diese Methode.
-        return -1;
+        int count = 0;
+        for (int row = 0; row < matrix.length; row++) {
+            for (int col = 0; col < matrix[row].length; col++) {
+                if (isAssimilated(matrix, row, col)) count++;
+            }
+        }
+        return count;
+    }
+
+    public static boolean isAssimilated(int[][] matrix, int row, int col) {
+        int above = row-1, below = row+1;
+        int left = col-1, right = col+1;
+        int[] neighbors = new int[8];
+        if (above >= 0) {
+            neighbors[1] = matrix[above][col];
+            if (left >= 0) neighbors[0] = matrix[above][left];
+            if (right < matrix[row].length) neighbors[2] = matrix[above][right];
+        }
+        if (below < matrix.length) {
+            neighbors[6] = matrix[below][col];
+            if (left >= 0) neighbors[5] = matrix[below][left];
+            if (right < matrix[row].length) neighbors[7] = matrix[below][right];
+        }
+        if (left >= 0) neighbors[3] = matrix[row][left];
+        if (right < matrix[row].length) neighbors[4] = matrix[row][right];
+        int sum = 0;
+        for (int neighbor : neighbors) sum += neighbor;
+        return sum % matrix[row][col] == 0;
     }
 
     public static void main(String[] args) {

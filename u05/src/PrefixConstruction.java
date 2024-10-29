@@ -1,20 +1,19 @@
 public class PrefixConstruction {
 
 	public static void main(String[] args) {
-		System.out.println(isPrefixConstruction("abcababc", "abc", 2));
+		System.out.println(isPrefixConstruction("abac", "abc", 3));
 	}
 
 	public static boolean isPrefixConstruction(String s, String t, int n) {
-		int length = s.length();
-		if (n < 0) return false;
-		if (s.isEmpty()) return true;
-		int count = 0;
+		if (n <= 0) return false;
 		for (int i = 0; i < t.length() && i < s.length(); i++) {
-			if (t.contains(s.substring(length-i, length))) {
-				count++;
+			if (t.charAt(i) == s.charAt(i)) {
+				if (i == s.length()-1) return true;
+                if (isPrefixConstruction(s.substring(i + 1), t, n - 1)) return true;
+            } else {
+				return false;
 			}
 		}
-		if (count == 0) return false;
-		return isPrefixConstruction(s.substring(0, count), t, n-1);
+		return false;
 	}
 }
