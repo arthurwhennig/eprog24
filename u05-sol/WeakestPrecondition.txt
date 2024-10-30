@@ -1,0 +1,57 @@
+Andere logisch äquivalente Lösungen sind auch Korrekt.  
+Zum Beispiel wäre {x > 0} äquivalent zu {x >= 1}.
+
+1.
+
+P: { n > 7/4 } oder { n >= 2 }  oder  { n > 1.75 }
+S:   m = n * 4;  k = m - 2;
+Q: { n > 0 && k > 5 }
+
+
+2.
+
+P: { n != 0 }
+S:   m = n * n;  k = m * 2;
+Q: { k > 0 }
+
+
+3.
+
+P: { x > 0 }
+S:   y = x + 3; z = y + 1;
+Q: { z > 4 }
+
+
+4.
+
+P: { x == 12 }
+S:   y = x + 1; z = y - 3;
+Q: { z == 10 }
+
+
+5.
+
+P: { y != 0 }
+S:   x = y + z; x = y * y;
+Q: { x > 0 }
+
+
+6.
+
+P: { a > 2 }
+S:   x = a + 1; sum = x + a;
+Q: { sum > 5 }
+
+
+7.
+
+P: { y > -1 }
+S:   x = y; x = x + 1;
+Q: { x > 0 }
+
+
+8.
+
+P: { y != 0 }
+S:   x = 2 * y; z = x + y;
+Q: { z != 0 }
