@@ -24,25 +24,45 @@ public class Triangle {
 	}
 	
 	public int get(int i, int j) {
-		// TODO
+		if (i < rowMax && j < rows[i].length) {
+			return rows[i][j];
+		}
 		return -1;
 	}
 	
 	public void put(int i, int j, int value) {
-		// TODO
+		if (i < rowMax && j < rows[i].length) {
+			rows[i][j] = value;
+		}
 	}
 	
 	public void init(int[] data) {
-	    // TODO
+		int current = 0;
+		for (int i = 0; i < rowMax; i++) {
+			for (int j = 0; j < rows[i].length; j++) {
+				if (current < data.length) rows[i][j] = data[current++];
+			}
+		}
 	}
 	
 	public int[] linear() {
-		// TODO
-		return null;
+		int size = 0;
+		for (int i = 0; i < rows.length; i++) {
+			for (int j = 0; j < rows[i].length; j++) size++;
+		}
+		int[] elements = new int[size];
+		int current = 0;
+		for (int i = 0; i < rows.length; i++) {
+			for (int j = 0; j < rows[i].length; j++) elements[current++] = rows[i][j];
+		}
+		return elements;
 	}
 	
 	public void add(Triangle t){
-		// TODO
+		for (int i = 0; i < t.rowMax && i < rowMax; i++) {
+			for (int j = 0; j < t.rows[i].length && j < rows[i].length; j++)
+				rows[i][j] += t.rows[i][j];
+		}
 	}
 	
 	public String toString() {
