@@ -5,29 +5,30 @@ public class RobotPlacement {
 	
 	
 	public static void main(String[] args) {
-		char[][] areaA = {   {'-','-','-','-','R'}, 
-						     {'-','R','-','-','-'},
-							 {'-','-','-','R','-'},
-							 {'-','-','R','-','-'},
-							 {'-','-','R','-','-'}  };
-		int[] conflictingRobotsA = findConflictingRobot(areaA);
-		System.out.println(Arrays.toString(conflictingRobotsA));
-		
-		char[][] areaB = {   {'-','-','-','-','-'}, 
-							 {'-','-','-','-','-'},
-							 {'-','T','T','-','-'},
-							 {'-','T','T','-','-'},
-							 {'-','-','-','-','-'}  };
-		char[][] robotsB = placeRobots(areaB);
-		System.out.println(Arrays.deepToString(robotsB));
-		
-		char[][] areaC = {   {'-','-','-','-','-'}, 
-							 {'-','-','-','-','-'},
-							 {'R','T','T','-','-'},
-							 {'-','T','T','R','-'},
-							 {'-','-','-','-','-'}  };
-		char[][] robotsC = placeOtherRobots(areaC);
-		System.out.println(Arrays.deepToString(robotsC));
+		char[][] areaA = {
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','T','T','T','T','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','T','T','T','T','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','T','T','T','T','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'},			
+	};
+		char[][] area = placeRobots(areaA);
+		System.out.println(Arrays.deepToString(area));
 		
 	}
 	
@@ -69,19 +70,25 @@ public class RobotPlacement {
 		return new int[] { conflict[0], conflict[1] };
 	}
 	
-	
-	public static char[][] placeNewRobots(char[][] area, int col) {
+	// Places a new robot into col and return the resulting area
+	// Returns null if there is no possible solution without conflicts
+	public static char[][] placeNewRobots(char[][] area, int prev, int col) {
 		// exit if col is out of bounds
 		if (col == area.length) return area;
 		for (int i = 0; i < area.length; i++) {
 			char curr = area[i][col];
-			if (curr == 'R') return placeNewRobots(area, col+1);
-			if (curr == 'T') continue;
+			// skip the entire column if there is already a robot
+			if (curr == 'R') return placeNewRobots(area, i, col+1);
+			// skip treasure positions and positions that directly conflict the previously inserted robot
+			if (i == prev || i == prev+1 || i == prev-1 || curr == 'T') continue;
+			// insert the robot
 			area[i][col] = 'R';
+			// continue recursively if there are no conflicts with the new robot
 			if (findConflictingRobot(area) == null) {
-				char[][] newArea = placeNewRobots(area, col+1);
+				char[][] newArea = placeNewRobots(area, i, col+1);
 				if (newArea != null) return newArea;
 			}
+			// delete the robot if there is no recursive solution for newArea
 			area[i][col] = curr;
 		}
 		return null;
@@ -89,12 +96,12 @@ public class RobotPlacement {
 
 	// Place h robots in an h*h area to protect the treasure
 	public static char[][] placeRobots(char[][] area) {
-		return placeNewRobots(area, 0);
+		return placeNewRobots(area, -2, 0);
 	}
 
 	// Place other robots with pre-installed robots in an h*h area to protect the treasure
 	public static char[][] placeOtherRobots(char[][] area) {
-		return placeNewRobots(area, 0);
+		return placeNewRobots(area, -2, 0);
 	}
 
 }
