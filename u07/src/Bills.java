@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Bills {
@@ -19,6 +20,35 @@ public class Bills {
    * Ändern Sie nicht die Signatur der Methode
    */
   public static void process(Scanner input, PrintStream output) {
-    // TODO Lesen Sie das File von input und geben Sie Ihre Lösung nach output aus.
+	  ArrayList<User> users = new ArrayList<User>();
+	  Tarif tarif = new Tarif(0);
+	  
+	  while (input.hasNextLine()) {
+		  String line = input.nextLine();
+		  String[] content = line.split(" ");
+		  int[] data = new int[content.length];
+		  for (int i = 1; i < data.length; i++) {
+			  data[i] = Integer.parseInt(content[i]);
+		  }
+		  if (line.startsWith("Tarif")) {
+			  int size = Integer.parseInt(content[1]);
+			  tarif = new Tarif(size);
+			  for (int i = 2; i < data.length - 1; i += 2) {
+				  tarif.addRule(data[i], data[i+1]);
+			  }
+		  } else if (line.startsWith("ID")) {
+			  int id = data[0];
+			  User user = new User(id, tarif);
+			  for (int i = 1; i <= 4 && i < data.length; i++) {
+				  int quartal = data[i];
+				  user.addConsumption(quartal);
+			  }
+			  users.add(user);
+		  }
+	  }
+	  
+	  for (User user : users) {
+		  output.println(user.getBill());
+	  }
   }
 }
