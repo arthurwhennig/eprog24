@@ -1,5 +1,5 @@
 Schreiben Sie hier Ihre Loop Invariante:
 
-1.
+1. { res = ((x-1)*x)/2 && x <= n+1 && n >= 0 }
 
-2.
+2. { res = b - (a-1) && x <= a && a >= 0 }

@@ -22,7 +22,8 @@ public class User {
 	
 	public int calculateBill() {
 		int total = getTotalConsumption();
-		return tarif.getPrice(total);
+		int rappen = tarif.getPrice(total);
+		return (int) Math.round((double) rappen/100);
 	}
 	
 	public String getBill() {

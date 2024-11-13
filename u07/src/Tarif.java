@@ -17,13 +17,20 @@ public class Tarif {
 	}
 	
 	public int getPrice(int consumption) {
+		if (intervals.length < 1) return -1;
 		int total = 0;
-		for (int i = 0; i < intervals.length; i++) {
-			int rest = consumption - intervals[i];
-			if (rest < 0) break;
-			total += prices[i] * intervals[i];
-			consumption = rest;
+		
+		for (int i = 0; i < intervals.length-1; i++) {
+			if (consumption >= intervals[i]) {
+				total += (intervals[i] * prices[i]);
+				consumption -= intervals[i];
+			} else {
+				total += (consumption * prices[i]);
+				consumption = 0;
+			}
 		}
+		total += (consumption * prices[intervals.length-1]);
+		
 		return total;
 	}
 }

@@ -9,7 +9,7 @@ public class Bills {
   public static void main(String[] args) throws FileNotFoundException {
     String inputFile = "Data.txt";
     Scanner input = new Scanner(new File(inputFile));
-    PrintStream output = new PrintStream(System.out);
+    PrintStream output = new PrintStream(new File("Output.txt"));
 
     process(input, output);
 
@@ -27,8 +27,9 @@ public class Bills {
 		  String line = input.nextLine();
 		  String[] content = line.split(" ");
 		  int[] data = new int[content.length];
-		  for (int i = 1; i < data.length; i++) {
-			  data[i] = Integer.parseInt(content[i]);
+		  for (int i = 0; i < data.length; i++) {
+			  if (content[i].equals("Tarif")) data[i] = 0;
+			  else data[i] = Integer.parseInt(content[i]);
 		  }
 		  if (line.startsWith("Tarif")) {
 			  int size = Integer.parseInt(content[1]);
@@ -36,7 +37,7 @@ public class Bills {
 			  for (int i = 2; i < data.length - 1; i += 2) {
 				  tarif.addRule(data[i], data[i+1]);
 			  }
-		  } else if (line.startsWith("ID")) {
+		  } else {
 			  int id = data[0];
 			  User user = new User(id, tarif);
 			  for (int i = 1; i <= 4 && i < data.length; i++) {
