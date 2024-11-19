@@ -19,7 +19,7 @@ public class Game {
 				Human otherPlayer = players[i];
 				if (otherPlayer == null) break;
 				if (otherPlayer == warrior) continue;
-				if (Math.abs(otherPlayer.getPosition() - warrior.getPosition()) <= 1) { // decrease health
+				if (Math.abs(otherPlayer.getPosition() - warrior.getPosition()) == 1) { // decrease health
 					otherPlayer.damage(10);
 				}
 			}
@@ -37,7 +37,7 @@ public class Game {
 				Human otherPlayer = players[i];
 				if (otherPlayer == null) break;
 				if (otherPlayer == cleric) continue;
-				if (Math.abs(otherPlayer.getPosition() - cleric.getPosition()) <= 1) { // decrease health
+				if (Math.abs(otherPlayer.getPosition() - cleric.getPosition()) == 1) { // decrease health
 					otherPlayer.damage(3);
 				}
 			}
