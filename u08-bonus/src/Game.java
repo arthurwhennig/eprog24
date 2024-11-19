@@ -68,8 +68,6 @@ public class Game {
 		for (Human player : Human.actionQueue) {
 			if (player.getAction() != Action.ATTACK && player.getDelay() > 0) {
 				result.add(player);
-			} else {
-				player.resetAction();
 			}
 		}
 		Human.actionQueue = result;
@@ -89,7 +87,7 @@ public class Game {
 			}
 		}
 		decreaseAllDelays();
-		resetAllActions();
+//		resetAllActions();
 		
 	}
 
