@@ -23,7 +23,7 @@ public class Main {
         System.out.println("Emils Gesundheit: " + emil.getHealth());
 
         // attacks are executed
-        game.advanceTurn(); 
+        game.advanceTurn();
 
         System.out.println("\nRunde 1...");
         System.out.println("Alices Gesundheit: " + alice.getHealth());

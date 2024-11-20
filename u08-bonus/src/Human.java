@@ -1,9 +1,4 @@
-import java.util.ArrayList;
-
 public class Human {
-	
-	public static ArrayList<Human> actionQueue = new ArrayList<Human>();
-
 	
 	public int health, position;
 	private PlayerType type;
@@ -73,8 +68,7 @@ public class Human {
 		} else if (action == Action.SUMMON && this.type == PlayerType.WARRIOR) {
 			this.delaySummon = 1;
 		}
-		actionQueue.add(this);
-		return true;
+		return Game.queue.add(this);
 	}
 	
 	
