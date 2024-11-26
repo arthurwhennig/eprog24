@@ -3,7 +3,7 @@ import java.io.PrintStream;
 
 // Ausser der "extends" Klausel, veraendern Sie diese Datei nicht!
 
-public class C /* Wenn noetig, dann fuegen Sie hier eine "extends" Klausel hinzu */ {
+public class C extends D {
 
 	public void foo(PrintStream output) {
 		output.println("Here");

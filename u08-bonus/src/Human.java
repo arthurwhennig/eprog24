@@ -67,6 +67,8 @@ public class Human {
 			this.delaySummon = 2;
 		} else if (action == Action.SUMMON && this.type == PlayerType.WARRIOR) {
 			this.delaySummon = 1;
+		} else {
+			this.delaySummon = 0;
 		}
 		return Game.queue.add(this);
 	}

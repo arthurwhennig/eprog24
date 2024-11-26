@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Game {
 	
-	static ArrayList<Human> queue;
+	public static ArrayList<Human> queue;
 	
 	private Human[] players;
 	private int currPlayer;
@@ -11,6 +11,10 @@ public class Game {
 		this.players = new Human[100];
 		this.currPlayer = 0;
 		Game.queue = new ArrayList<Human>();
+	}
+	
+	public void jesterTurn(Human jester) {
+		jester.resetAction();
 	}
 	
 	public void warriorTurn(Human warrior) {
@@ -29,6 +33,7 @@ public class Game {
 		} else if (action == Action.SUMMON) {
 			if (warrior.getDelay() != 0) return;
 			warrior.damage(5);
+			warrior.resetAction();
 		}
 	}
 	
@@ -56,7 +61,7 @@ public class Game {
 					otherPlayer.setPosition(cleric.getPosition());
 				}
 			}
-			
+			cleric.resetAction();
 		}
 	}
 	
@@ -71,7 +76,7 @@ public class Game {
 	public void resetAllActions() {
 		ArrayList<Human> result = new ArrayList<Human>();
 		for (Human player : Game.queue) {
-			if (player.getAction() != Action.NONE && player.getDelay() > 0) {
+			if (player.getAction() == Action.SUMMON && player.getDelay() > 0) {
 				result.add(player);
 			}
 		}
@@ -81,11 +86,11 @@ public class Game {
 	void advanceTurn() {
 		for (Human player : Game.queue) {
 			if (player.hasAction() && player.isAlive()) {
-				if (player.getType() == PlayerType.JESTER) continue;
-				if (player.getType() == PlayerType.CLERIC) {
+				if (player.getType() == PlayerType.JESTER) {
+					jesterTurn(player);
+				} else if (player.getType() == PlayerType.CLERIC) {
 					clericTurn(player);
-				}
-				if (player.getType() == PlayerType.WARRIOR) {
+				} else if (player.getType() == PlayerType.WARRIOR) {
 					warriorTurn(player);
 				}
 			}

@@ -3,7 +3,7 @@ import java.io.PrintStream;
 
 // Ausser der "extends" Klausel, veraendern Sie diese Datei nicht!
 
-public class B /* Wenn noetig, dann fuegen Sie hier eine "extends" Klausel hinzu */ {
+public class B extends A {
 
 	B() {}
 

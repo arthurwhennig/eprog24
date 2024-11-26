@@ -8,6 +8,7 @@ public class GraphExecution {
 	public static void addResultsFromChildren(Node n, ProgramState state, LinkedProgramStateList results) {
 		Node[] children = n.getSubnodes();
 		if (n.getType().equals("CHOICE")) {
+			
 			for (int i = 0; i < children.length; i++) {
 				addResultsFromChildren(children[i], state, results);
 				
