@@ -1,0 +1,5 @@
+Schreiben Sie hier Ihre Loop Invariante:
+
+1.
+
+2.
