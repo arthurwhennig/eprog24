@@ -39,8 +39,7 @@ class EinklappbareRaeder extends Part {
 		int previousCost = c.productionCost;
 		if (previousCost + 7000 < 100000)
 			c.productionCost = previousCost + 7000;
-		else
-			c.productionCost = 100000;
+
 		c.vat = c.vat + (c.productionCost - previousCost) * 7 / 100;
 	}
 }
