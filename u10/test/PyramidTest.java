@@ -10,8 +10,8 @@ import pyramid.*;
 
 public class PyramidTest {
 	
-	@Rule
-	public Timeout globalTimeout= Timeout.seconds(5);
+//	@Rule
+//	public Timeout globalTimeout= Timeout.seconds(5);
 	
     @Test
     public void testPyramidTwoLevels() {

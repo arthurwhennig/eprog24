@@ -6,11 +6,21 @@ public class Factory {
 	 * Sie duerfen in diese Klasse weitere Methoden hinzufuegen
 	 */
 	public static Cost computeCost(Part[] steps) {
+		
 		Cost c = new Cost();
-
+		
+		int countFlux = 0;
+		boolean luxury = false;
 		for (Part p : steps) {
+			if (p instanceof Fluxkompensator) countFlux++;
+			if (p instanceof Schwebeumwandlung && countFlux != 0 || p instanceof OutatimeKennzeichen && countFlux != 0) return null;
+			if (p instanceof FirstEditionFluxkompensator || p instanceof VerchromteRaeder) luxury = true;
 			p.process(c);
 		}
+		if (countFlux > 1) return null;
+	
+		if (luxury) c.luxuryTax = c.productionCost * 5/100;
+		else c.luxuryTax = 0;
 
 		return c;
 	}
