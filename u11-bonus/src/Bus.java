@@ -6,8 +6,6 @@ public class Bus extends Connection {
 
 	@Override
 	public int getTime() {
-		// TODO
-
-		return 0;
+		return 10 + Math.max(0, (distance - 2) * 7);
 	}
 }

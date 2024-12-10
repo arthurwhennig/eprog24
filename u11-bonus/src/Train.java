@@ -6,8 +6,6 @@ public class Train extends Connection {
 
 	@Override
 	public int getTime() {
-		// TODO
-
-		return 0;
+		return 32 + Math.max(0, (distance - 8) * 2);
 	}
 }

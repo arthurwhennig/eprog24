@@ -20,6 +20,7 @@ public class Station {
 	public List<Connection> getConnections() {
 		return connections;
 	}
+	
 
 	@Override
 	public String toString() {
