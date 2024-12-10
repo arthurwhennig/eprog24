@@ -27,7 +27,7 @@ public class TransportSystem {
 	public Route findFastestRoute() {
 		Station start = stations.getFirst(), dest = stations.getLast();
 		
-		queue.add(new Node(start, 0));
+		queue.add(new Node(start, null, 0));
 		records.get(start.getName()).busVisited = true;
 		records.get(start.getName()).tramVisited = true;
 		records.get(start.getName()).trainVisited = true;
@@ -37,11 +37,11 @@ public class TransportSystem {
 			Node curr = queue.poll();
 			Station station = curr.getStation();
 			Record currRec = records.get(station.getName());
+			Connection currConn = curr.getConn();
 			
-			Connection prev = previous.get(station.getName());
-			if (prev instanceof Bus) currRec.busVisited = true;
-			if (prev instanceof Tram) currRec.tramVisited = true;
-			if (prev instanceof Train) currRec.trainVisited = true;
+			if (currConn instanceof Bus) currRec.busVisited = true;
+			if (currConn instanceof Tram) currRec.tramVisited = true;
+			if (currConn instanceof Train) currRec.trainVisited = true;
 			
 			for (Connection conn : station.getConnections()) {
 				char next = conn.getNextStation();
@@ -50,28 +50,28 @@ public class TransportSystem {
 				if (conn instanceof Bus) {
 					if (nextRec.busVisited) continue;
 					int newTimeDist = currRec.timeDist + conn.getTime();
-					if (prev instanceof Bus) newTimeDist -= 2;
+					if (currConn instanceof Bus) newTimeDist -= 2;
 					if (newTimeDist < nextRec.timeDist) {
 						nextRec.timeDist = newTimeDist;
-						queue.add(new Node(nextStation, newTimeDist));
+						queue.add(new Node(nextStation, conn, newTimeDist));
 						previous.put(next, conn);
 					}
 				} else if (conn instanceof Tram) {
 					if (nextRec.tramVisited) continue;
 					int newTimeDist = currRec.timeDist + conn.getTime();
-					if (prev instanceof Tram) newTimeDist -= 5;
+					if (currConn instanceof Tram) newTimeDist -= 5;
 					if (newTimeDist < nextRec.timeDist) {
 						nextRec.timeDist = newTimeDist;
-						queue.add(new Node(nextStation, newTimeDist));
+						queue.add(new Node(nextStation, conn, newTimeDist));
 						previous.put(next, conn);
 					}
 				} else if (conn instanceof Train) {
 					if (nextRec.trainVisited) continue;
 					int newTimeDist = currRec.timeDist + conn.getTime();
-					if (prev instanceof Train) newTimeDist -= 10;
+					if (currConn instanceof Train) newTimeDist -= 10;
 					if (newTimeDist < nextRec.timeDist ) {
 						nextRec.timeDist = newTimeDist;
-						queue.add(new Node(nextStation, newTimeDist));
+						queue.add(new Node(nextStation, conn, newTimeDist));
 						previous.put(next, conn);
 					}
 				}
