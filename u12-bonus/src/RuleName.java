@@ -1,3 +1,4 @@
+import java.util.Set;
 
 public class RuleName extends EBNFNode {
 	
@@ -10,13 +11,17 @@ public class RuleName extends EBNFNode {
 
 	@Override
 	public String toEBNFString() {
-		// TODO task a
-		
-		return null;
+		return "<" + this.name + ">";
 	}
 	
 	@Override
 	public String toString() {
 		return "RuleName(" + name + ")";
+	}
+	
+	@Override
+	public Set<String> getShortestWords(EBNFRules rules, int limit) {
+		if (!rules.containsRule(name)) throw new IllegalEBNFDescriptionException();
+		return rules.getShortestWords(name, limit);
 	}
 }

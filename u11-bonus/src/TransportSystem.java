@@ -76,6 +76,8 @@ public class TransportSystem {
 					}
 				}
 			}
+			
+			if (station == dest) break;
 		}
 		
 		Record destRec = records.get(dest.getName());

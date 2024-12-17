@@ -1,3 +1,4 @@
+import java.util.Set;
 
 public class Brackets extends EBNFNode {
 
@@ -10,13 +11,16 @@ public class Brackets extends EBNFNode {
 
 	@Override
 	public String toEBNFString() {
-		// TODO task a
-		
-		return null;
+		return "(" + this.child.toEBNFString() + ")";
 	}
 	
 	@Override
 	public String toString() {
 		return "Brackets(" + child + ")";
+	}
+	
+	@Override
+	public Set<String> getShortestWords(EBNFRules rules, int limit) {
+		return null;
 	}
 }

@@ -121,4 +121,13 @@ public class EBNFRulesTest {
 		assertThrows(IllegalEBNFDescriptionException.class, ()->rules2.getShortestWords("qrule", 7));
 	}
 	
+	@Test
+	public void testGetShortestWords6() {
+		Map<String,EBNFNode> map2 = new HashMap<String,EBNFNode>();
+		map2.put("xrule", new Sequence(new Sequence(new Repetition(new Literal('A')), new Repetition(new Literal('B'))), new Sequence(new Literal('C'), new Literal('D'))));
+	
+		EBNFRules rules = new EBNFRules(map2);
+		
+		assertEquals(Set.of("BCD", "ABCD", "AABCD", "AAABCD", "ACD", "ABBCD", "ABBBCD", "AABBCD", "BBCD", "BBBCD", "BBBBCD", "AACD", "AAACD", "AAAACD", "CD"), rules.getShortestWords("xrule", 6));
+	}
 }

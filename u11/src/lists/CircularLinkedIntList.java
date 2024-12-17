@@ -21,4 +21,46 @@ public class CircularLinkedIntList implements IntList {
 	}
 	
 	// TODO: Implementieren Sie die Methoden für das IntList Interface
+	public boolean isEmpty() {
+		return size == 0;
+	}
+	
+	public int get(int idx) {
+		return 0;
+	}
+	
+	public void addLast(int item) {
+		
+	}
+	@Override
+	public void set(int index, int value) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void addFirst(int value) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public int removeFirst() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public int removeLast() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public int[] toArray() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

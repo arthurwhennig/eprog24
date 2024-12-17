@@ -1,4 +1,5 @@
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Set;
 
 public class EBNFRules implements EBNFString {
@@ -11,14 +12,25 @@ public class EBNFRules implements EBNFString {
 
 	@Override
 	public String toEBNFString() {
-		// TODO task a
-		
-		return null;
+		TreeMap<String, EBNFNode> sorted = new TreeMap<String, EBNFNode>();
+		for (Map.Entry<String, EBNFNode> entry : rules.entrySet()) {
+			sorted.put(entry.getKey(), entry.getValue());
+		}
+		String result = "";
+		for (Map.Entry<String, EBNFNode> entry : sorted.entrySet()) {
+			String line = "<" + entry.getKey() + "><-" + entry.getValue().toEBNFString() + "\n";
+			result = result + line;
+		}
+		return result;
 	}
 
 	public Set<String> getShortestWords(String name, int limit) {
-		// TODO task b
-
-		return null;
+		EBNFNode node = rules.get(name);
+		if (node == null) throw new IllegalEBNFDescriptionException();
+		return node.getShortestWords(this, limit);
+	}
+	
+	public boolean containsRule(String name) {
+		return rules.containsKey(name);
 	}
 }

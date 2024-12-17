@@ -1,3 +1,5 @@
+import java.util.*;
+import java.util.TreeSet;
 
 public class Literal extends EBNFNode {
 	
@@ -10,9 +12,7 @@ public class Literal extends EBNFNode {
 	
 	@Override
 	public String toEBNFString() {
-		// TODO task a
-		
-		return null;
+		return "" + this.literal;
 	}
 
 	@Override
@@ -20,4 +20,10 @@ public class Literal extends EBNFNode {
 		return "Literal(" + literal + ")";
 	}
 	
+	@Override
+	public Set<String> getShortestWords(EBNFRules rules, int limit) {
+		TreeSet<String> newSet = new TreeSet<String>();
+		if (toEBNFString().length() <= limit) newSet.add(toEBNFString());
+		return newSet;
+	}
 }
