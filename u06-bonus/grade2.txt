@@ -1,0 +1,644 @@
+NETHZ: ahennig
+
+Total Points: 5
+Total Percentage: 100%
+
+Timeout: NO
+
+test1FindConflictingRobots01: PASS
+test1FindConflictingRobots02: PASS
+test1FindConflictingRobots03: PASS
+test1FindConflictingRobots04: PASS
+test1FindConflictingRobots05: PASS
+test1FindConflictingRobots06: PASS
+test1FindConflictingRobots07: PASS
+test1FindConflictingRobots08: PASS
+test2PlaceRobots01: PASS
+test2PlaceRobots02: PASS
+test2PlaceRobots03: PASS
+test2PlaceRobots04: PASS
+test2PlaceRobots05: PASS
+test2PlaceRobots06: PASS
+test2PlaceRobots07: PASS
+test2PlaceRobots08: PASS
+test2PlaceRobots09: PASS
+test2PlaceRobots10: PASS
+test2PlaceRobots11: PASS
+test3PlaceOtherRobots01: PASS
+test3PlaceOtherRobots02: PASS
+test3PlaceOtherRobots03: PASS
+test3PlaceOtherRobots04: PASS
+test3PlaceOtherRobots05: PASS
+test3PlaceOtherRobots06: PASS
+test3PlaceOtherRobots07: PASS
+test3PlaceOtherRobots08: PASS
+test3PlaceOtherRobots09: PASS
+test3PlaceOtherRobots10: PASS
+test3PlaceOtherRobots11: PASS
+
+
+Folgende Test-Datei wurde für die Bewertung verwendet:
+
+import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class GradingRobotPlacementTest {
+	public boolean arrayContains(int[][] arr, int[] element) {
+        for (int[] a : arr) {
+            if (Arrays.equals(a, element)) return true;
+        }
+        return false;
+    }
+	
+	@Test
+	public void test1FindConflictingRobots01() {
+		char[][] area = {
+				{'-','-','-','-'},
+				{'R','-','R','-'},
+				{'-','-','-','-'},
+				{'-','-','-','-'}
+		};
+		
+		int[] result = RobotPlacement.findConflictingRobot(area);
+		int[][] expected = { {1,0}, {1,2} };
+		assertTrue(arrayContains(expected, result));
+	}
+	
+	@Test
+	public void test1FindConflictingRobots02() {
+		char[][] area = {
+				{'-','R','-','-'},
+				{'-','-','-','-'},
+				{'-','R','-','-'},
+				{'-','-','-','-'}
+		};
+		
+		int[] result = RobotPlacement.findConflictingRobot(area);
+		int[][] expected = { {0,1}, {2,1} };
+		assertTrue(arrayContains(expected, result));
+	}
+	
+	@Test
+	public void test1FindConflictingRobots03() {
+		char[][] area = {
+				{'-','-','-','-'},
+				{'-','-','R','-'},
+				{'-','R','-','-'},
+				{'-','-','-','-'}
+		};
+		
+		int[] result = RobotPlacement.findConflictingRobot(area);
+		int[][] expected = { {1,2}, {2,1} };
+		assertTrue(arrayContains(expected, result));
+	}
+	
+	@Test
+	public void test1FindConflictingRobots04() {
+		char[][] area = {
+				{'R','-','-','-','-','R'},
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','-'},
+				{'R','-','-','-','-','-'}
+		};
+		
+		int[] result = RobotPlacement.findConflictingRobot(area);
+		int[][] expected = { {0,0}, {0,5}, {5,0} };
+		assertTrue(arrayContains(expected, result));
+	}
+	
+	@Test
+	public void test1FindConflictingRobots05() {
+		char[][] area = {
+				{'R','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-'},
+				{'-','R','-','-','-','-','-'},
+				{'-','-','-','-','-','-','R'}
+		};
+		
+		int[] result = RobotPlacement.findConflictingRobot(area);
+		int[][] expected = { {0,0}, {6,6} };
+		assertTrue(arrayContains(expected, result));
+		assertFalse(Arrays.equals(result, new int[] {5,1}));
+	}
+	
+	@Test
+	public void test1FindConflictingRobots06() {
+		char[][] area = {
+				{'R','-','-','-','-','-','-'},
+				{'-','-','-','R','-','-','-'},
+				{'-','R','-','-','-','-','-'},
+				{'-','-','-','-','R','-','-'},
+				{'-','-','R','-','-','-','-'},
+				{'-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-'}
+		};
+		
+		int[] result = RobotPlacement.findConflictingRobot(area);
+		assertNull(result);
+	}
+	
+	@Test
+	public void test1FindConflictingRobots07() {
+		char[][] area = {
+				{'-','R','T','T','-','-','-'},
+				{'-','-','T','T','-','-','R'},
+				{'-','-','T','T','-','-','-'},
+				{'-','-','T','T','-','-','-'},
+				{'-','-','-','-','-','-','-'},
+				{'-','-','-','R','-','-','-'},
+				{'-','-','-','-','-','R','-'}
+		};
+		
+		int[] result = RobotPlacement.findConflictingRobot(area);
+		assertNull(result);
+	}
+	
+	@Test
+	public void test1FindConflictingRobots08() {
+		char[][] area = {
+				{'-','-','-','-','-','-','R'},
+				{'R','-','-','-','-','-','-'},
+				{'-','T','T','T','T','T','-'},
+				{'-','T','T','T','T','T','-'},
+				{'-','T','T','T','T','T','-'},
+				{'-','R','-','-','-','-','-'},
+				{'-','-','-','R','-','-','-'}
+		};
+		
+		int[] result = RobotPlacement.findConflictingRobot(area);
+		int[][] expected = { {5,1}, {0,6} };
+		assertTrue(arrayContains(expected, result));
+		assertFalse(Arrays.equals(result, new int[]{1,0}));
+		assertFalse(Arrays.equals(result, new int[]{0,4}));
+	}
+	
+	@Test
+	public void test2PlaceRobots01() {
+		char[][] area = { {'T'} };
+		char[][] result = RobotPlacement.placeRobots(area);
+		assertNull(result);
+	}
+	
+	@Test
+	public void test2PlaceRobots02() {
+		char[][] area = {
+				{'T','-','-','-'},
+				{'-','-','-','-'},
+				{'-','-','-','-'},
+				{'-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeRobots(area);
+		char[][] expected1 = {
+				{'T','-','R','-'},
+				{'R','-','-','-'},
+				{'-','-','-','R'},
+				{'-','R','-','-'}
+		};
+		char[][] expected2 = {
+				{'T','R','-','-'},
+				{'-','-','-','R'},
+				{'R','-','-','-'},
+				{'-','-','R','-'}
+		};
+		assertTrue(Arrays.deepEquals(result, expected1)
+				|| Arrays.deepEquals(result, expected2));
+	}
+	
+	@Test
+	public void test2PlaceRobots03() {
+		char[][] area = {
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','T'}
+		};
+		char[][] result = RobotPlacement.placeRobots(area);
+		char[][] expected1 = {
+				{'-','-','R','-','-','-'},
+				{'-','-','-','-','-','R'},
+				{'-','R','-','-','-','-'},
+				{'-','-','-','-','R','-'},
+				{'R','-','-','-','-','-'},
+				{'-','-','-','R','-','T'}
+		};
+		char[][] expected2 = {
+				{'-','R','-','-','-','-'},
+				{'-','-','-','R','-','-'},
+				{'-','-','-','-','-','R'},
+				{'R','-','-','-','-','-'},
+				{'-','-','R','-','-','-'},
+				{'-','-','-','-','R','T'}
+		};
+		char[][] expected3 = {
+				{'-','-','-','-','R','-'},
+				{'-','-','R','-','-','-'},
+				{'R','-','-','-','-','-'},
+				{'-','-','-','-','-','R'},
+				{'-','-','-','R','-','-'},
+				{'-','R','-','-','-','T'}
+		};
+		char[][] expected4 = {
+				{'-','-','-','R','-','-'},
+				{'R','-','-','-','-','-'},
+				{'-','-','-','-','R','-'},
+				{'-','R','-','-','-','-'},
+				{'-','-','-','-','-','R'},
+				{'-','-','R','-','-','T'}
+		};
+		assertTrue(Arrays.deepEquals(result, expected1)
+				|| Arrays.deepEquals(result, expected2)
+				|| Arrays.deepEquals(result, expected3)
+				|| Arrays.deepEquals(result, expected4));
+	}
+	
+	@Test
+	public void test2PlaceRobots04() {
+		char[][] area = {
+				{'-','-','-','-'},
+				{'-','T','T','-'},
+				{'-','T','T','-'},
+				{'-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeRobots(area);
+		char[][] expected1 = {
+				{'-','-','R','-'},
+				{'R','T','T','-'},
+				{'-','T','T','R'},
+				{'-','R','-','-'}
+		};
+		char[][] expected2 = {
+				{'-','R','-','-'},
+				{'-','T','T','R'},
+				{'R','T','T','-'},
+				{'-','-','R','-'}
+		};
+		assertTrue(Arrays.deepEquals(result, expected1)
+				|| Arrays.deepEquals(result, expected2));
+	}
+	
+	@Test
+	public void test2PlaceRobots05() {
+		char[][] area = {
+				{'-','-','-','-','-','-'},
+				{'-','-','T','T','-','-'},
+				{'-','-','T','T','-','-'},
+				{'-','-','T','T','-','-'},
+				{'-','-','T','T','-','-'},
+				{'-','-','-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeRobots(area);
+		char[][] expected1 = {
+				{'-','-','R','-','-','-'},
+				{'-','-','T','T','-','R'},
+				{'-','R','T','T','-','-'},
+				{'-','-','T','T','R','-'},
+				{'R','-','T','T','-','-'},
+				{'-','-','-','R','-','-'}
+		};
+		char[][] expected2 = {
+				{'-','-','-','R','-','-'},
+				{'R','-','T','T','-','-'},
+				{'-','-','T','T','R','-'},
+				{'-','R','T','T','-','-'},
+				{'-','-','T','T','-','R'},
+				{'-','-','R','-','-','-'}
+		};
+		assertTrue(Arrays.deepEquals(result, expected1)
+				|| Arrays.deepEquals(result, expected2));
+	}
+	
+	@Test
+	public void test2PlaceRobots06() {
+		char[][] area = {
+				{'-','-','-','-','-','-'},
+				{'-','-','-','T','-','-'},
+				{'-','-','-','T','-','-'},
+				{'-','-','-','T','-','-'},
+				{'-','-','-','T','-','-'},
+				{'-','-','-','T','-','-'}
+		};
+		char[][] result = RobotPlacement.placeRobots(area);
+		char[][] expected = {
+				{'-','-','-','R','-','-'},
+				{'R','-','-','T','-','-'},
+				{'-','-','-','T','R','-'},
+				{'-','R','-','T','-','-'},
+				{'-','-','-','T','-','R'},
+				{'-','-','R','T','-','-'}
+		};
+		assertTrue(Arrays.deepEquals(result, expected));
+	}
+	
+	@Test
+	public void test2PlaceRobots07() {
+		char[][] area = {
+				{'-','-','-'},
+				{'-','T','-'},
+				{'-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeRobots(area);
+		assertNull(result);
+	}
+	
+	@Test
+	public void test2PlaceRobots08() {
+		char[][] area = {
+				{'-','-','-','-','T','-','-','-','-','-','-'},
+				{'-','-','-','-','T','-','-','-','-','-','-'},
+				{'-','-','-','-','T','-','-','-','-','-','-'},
+				{'-','-','-','-','T','-','-','-','-','-','-'},
+				{'-','-','-','-','T','-','-','-','-','-','-'},
+				{'-','-','-','-','T','-','-','-','-','-','-'},
+				{'-','-','-','-','T','-','-','-','-','-','-'},
+				{'-','-','-','-','T','-','-','-','-','-','-'},
+				{'-','-','-','-','T','-','-','-','-','-','-'},
+				{'-','-','-','-','T','-','-','-','-','-','-'},
+				{'-','-','-','-','T','-','-','-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeRobots(area);
+		assertNull(result);
+	}
+	
+	@Test
+	public void test2PlaceRobots09() {
+		char[][] area = {
+				{'-','-','-','-','-','-','-'},
+				{'-','-','T','T','T','-','-'},
+				{'-','-','T','T','T','-','-'},
+				{'-','-','T','T','T','-','-'},
+				{'-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeRobots(area);
+		char[][] expected1 = {
+				{'-','-','R','-','-','-','-'},
+				{'R','-','T','T','T','-','-'},
+				{'-','-','T','T','T','R','-'},
+				{'-','R','T','T','T','-','-'},
+				{'-','-','-','-','R','-','-'},
+				{'-','-','-','-','-','-','R'},
+				{'-','-','-','R','-','-','-'}
+		};
+		char[][] expected2 = {
+				{'-','-','-','-','R','-','-'},
+				{'-','-','T','T','T','-','R'},
+				{'-','R','T','T','T','-','-'},
+				{'-','-','T','T','T','R','-'},
+				{'-','-','R','-','-','-','-'},
+				{'R','-','-','-','-','-','-'},
+				{'-','-','-','R','-','-','-'}
+		};
+		assertTrue(Arrays.deepEquals(result, expected1)
+				|| Arrays.deepEquals(result, expected2));
+	}
+	
+	@Test
+	public void test2PlaceRobots10() {
+		char[][] area = {
+				{'-','-','-','-','-'},
+				{'T','T','-','-','-'},
+				{'T','T','-','-','-'},
+				{'T','T','-','-','-'},
+				{'-','-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeRobots(area);
+		assertNull(result);
+	}
+	
+	@Test
+	public void test2PlaceRobots11() {
+		char[][] area = {
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','-'},
+				{'-','-','-','T','T','T'},
+				{'-','-','-','T','T','T'},
+				{'-','-','-','T','T','T'},
+				{'-','-','-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeRobots(area);
+		assertNull(result);
+	}
+	
+	@Test
+	public void test3PlaceOtherRobots01() {
+		char[][] area = {
+				{'T','-','-','-'},
+				{'R','-','-','-'},
+				{'-','-','-','-'},
+				{'-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeOtherRobots(area);
+		char[][] expected = {
+				{'T','-','R','-'},
+				{'R','-','-','-'},
+				{'-','-','-','R'},
+				{'-','R','-','-'}
+		};
+		assertTrue(Arrays.deepEquals(result, expected));
+	}
+	
+	@Test
+	public void test3PlaceOtherRobots02() {
+		char[][] area = {
+				{'-','-','-','-','-'},
+				{'-','-','-','-','-'},
+				{'-','-','T','-','-'},
+				{'-','-','-','-','-'},
+				{'R','-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeOtherRobots(area);
+		char[][] expected1 = {
+				{'-','-','R','-','-'},
+				{'-','-','-','-','R'},
+				{'-','R','T','-','-'},
+				{'-','-','-','R','-'},
+				{'R','-','-','-','-'}
+		};
+		char[][] expected2 = {
+				{'-','-','-','R','-'},
+				{'-','R','-','-','-'},
+				{'-','-','T','-','R'},
+				{'-','-','R','-','-'},
+				{'R','-','-','-','-'}
+		};
+		assertTrue(Arrays.deepEquals(expected1, result)
+				|| Arrays.deepEquals(expected2, result));
+	}
+	
+	@Test
+	public void test3PlaceOtherRobots03() {
+		char[][] area = {
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','-'},
+				{'R','-','-','-','-','-'},
+				{'-','-','-','-','-','-'},
+				{'-','-','T','-','-','-'},
+				{'-','-','-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeOtherRobots(area);
+		char[][] expected = {
+				{'-','-','-','-','R','-'},
+				{'-','-','R','-','-','-'},
+				{'R','-','-','-','-','-'},
+				{'-','-','-','-','-','R'},
+				{'-','-','T','R','-','-'},
+				{'-','R','-','-','-','-'}
+		};
+		assertTrue(Arrays.deepEquals(result, expected));
+	}
+	
+	@Test
+	public void test3PlaceOtherRobots04() {
+		char[][] area = {
+				{'R','-','-','-'},
+				{'-','-','-','-'},
+				{'-','-','-','-'},
+				{'-','-','-','T'}
+		};
+		char[][] result = RobotPlacement.placeOtherRobots(area);
+		assertNull(result);
+	}
+	
+	@Test
+	public void test3PlaceOtherRobots05() {
+		char[][] area = {
+				{'-','R','-','-','-'},
+				{'-','-','-','-','-'},
+				{'-','-','T','-','-'},
+				{'-','-','-','-','-'},
+				{'R','-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeOtherRobots(area);
+		assertNull(result);
+	}
+	
+	@Test
+	public void test3PlaceOtherRobots06() {
+		char[][] area = {
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','-'},
+				{'R','-','-','-','-','-'},
+				{'-','-','T','-','-','-'},
+				{'-','-','-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeOtherRobots(area);
+		assertNull(result);
+	}
+	
+	@Test
+	public void test3PlaceOtherRobots07() {
+		char[][] area = {
+				{'-','-','-','-','-','-'},
+				{'T','T','T','T','T','R'},
+				{'T','T','T','T','T','-'},
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','-'},
+				{'-','-','-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeOtherRobots(area);
+		assertNull(result);
+	}
+	
+	@Test
+	public void test3PlaceOtherRobots08() {
+		char[][] area = {
+				{'-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-'},
+				{'-','R','-','-','-','-','-'},
+				{'-','T','T','R','-','-','-'},
+				{'-','T','T','-','-','-','-'},
+				{'-','T','T','-','-','-','-'},
+				{'-','T','T','-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeOtherRobots(area);
+		char[][] expected = {
+				{'-','-','R','-','-','-','-'},
+				{'-','-','-','-','-','-','R'},
+				{'-','R','-','-','-','-','-'},
+				{'-','T','T','R','-','-','-'},
+				{'-','T','T','-','-','R','-'},
+				{'R','T','T','-','-','-','-'},
+				{'-','T','T','-','R','-','-'}
+		};
+		assertTrue(Arrays.deepEquals(result, expected));
+	}
+	
+	@Test
+	public void test3PlaceOtherRobots09() {
+		char[][] area = {
+				{'-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-'},
+				{'R','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','R','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','R'},
+				{'-','-','-','-','-','-','-','-','R','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','T','T','T','T','-','-','-'},
+				{'-','-','-','-','T','T','T','T','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeOtherRobots(area);
+		char[][] expected = {
+				{'-','-','-','-','-','-','-','-','-','R','-'},
+				{'-','-','-','-','-','-','-','R','-','-','-'},
+				{'-','-','-','-','R','-','-','-','-','-','-'},
+				{'-','-','R','-','-','-','-','-','-','-','-'},
+				{'R','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','R','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','R'},
+				{'-','-','-','-','-','-','-','-','R','-','-'},
+				{'-','-','-','-','-','-','R','-','-','-','-'},
+				{'-','-','-','R','T','T','T','T','-','-','-'},
+				{'-','R','-','-','T','T','T','T','-','-','-'}
+		};
+		assertTrue(Arrays.deepEquals(result, expected));
+	}
+	
+	@Test
+	public void test3PlaceOtherRobots10() {
+		char[][] area = {
+				{'-','-','-','-','-','-','-'},
+				{'-','-','-','T','-','-','-'},
+				{'-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','R','-'},
+				{'-','-','R','-','-','-','-'}
+		};
+		char[][] result = RobotPlacement.placeOtherRobots(area);
+		assertNull(result);
+	}
+	
+	@Test
+	public void test3PlaceOtherRobots11() {
+		char[][] area = {
+				{'-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','T','T','T','T','-','-','-','-'},
+				{'-','-','-','-','T','T','T','T','-','-','-','-'},
+				{'-','-','-','-','T','T','T','T','-','-','-','R'},
+				{'-','-','-','-','T','T','T','T','-','-','-','-'},
+				{'-','-','-','-','T','T','T','T','-','-','-','-'},
+				{'-','-','-','-','-','-','R','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'-','-','-','-','-','-','-','-','-','-','-','-'},
+				{'R','-','-','-','-','-','-','-','-','-','-','-'},
+		};
+		char[][] result = RobotPlacement.placeOtherRobots(area);
+		assertNull(result);
+	}
+}
