@@ -37,9 +37,8 @@ class EinklappbareRaeder extends Part {
 	@Override
 	public void process(Cost c) {
 		int previousCost = c.productionCost;
-		if (previousCost + 7000 < 100000)
-			c.productionCost = previousCost + 7000;
-
+		if (previousCost + 7000 >= 100000) c.productionCost = 100000;
+		else c.productionCost = previousCost + 7000;
 		c.vat = c.vat + (c.productionCost - previousCost) * 7 / 100;
 	}
 }
@@ -71,8 +70,8 @@ class VerchromteRaeder extends Part {
 	@Override
 	public void process(Cost c) {
 		int previousCost = c.productionCost;
-		int diff = Math.max(10000 - (previousCost + 7000), 0);
-		c.productionCost = previousCost + diff;
+		if (previousCost + 7000 >= 100000) c.productionCost = 100000;
+		else c.productionCost = previousCost + 7000;
 		c.vat = c.vat + (c.productionCost - previousCost) * 7 / 100;
 	}
 }

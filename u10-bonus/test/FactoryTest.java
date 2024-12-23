@@ -58,4 +58,60 @@ class FactoryTest {
 				new Fluxkompensator()
 			}));
 	}
+	
+	@Test
+	void luxus1() {
+		Cost c = Factory.computeCost(new Part[] {
+			new VerchromteRaeder()
+		});
+		assertEquals(5 * 7000 / 100, c.luxuryTax);
+	}
+
+	@Test
+	void luxus2() {
+		Cost c = Factory.computeCost(new Part[] {
+			new VerchromteRaeder(),
+			new FirstEditionFluxkompensator()
+		});
+		assertEquals(5 * 14000 / 100, c.luxuryTax);
+	}
+
+	@Test
+	void luxus3() {
+		Cost c = Factory.computeCost(new Part[] {
+			new VerchromteRaeder(),
+			new VerchromteRaeder(),
+			new EinklappbareRaeder()
+		});
+		assertEquals(3 * 7 * 7000 / 100, c.vat);
+	}
+
+	@Test
+	void luxus4() {
+		Cost c = Factory.computeCost(new Part[] {
+			new FirstEditionFluxkompensator(),
+			new EinklappbareRaeder(),
+			new Fluegeltueren(),
+			new VerchromteRaeder()
+		});
+		assertEquals(2 * 0 + 7000 + 2000 + 7000, c.productionCost);
+	}
+	
+	@Test
+	void mwst2() {
+		Cost c = Factory.computeCost(new Part[] {
+			new OutatimeKennzeichen(),
+			new Fluegeltueren(),
+			new Fluegeltueren(),
+			new Schwebeumwandlung(),
+			new Schwebeumwandlung(),
+			new Schwebeumwandlung(),
+			new EinklappbareRaeder()
+		});
+		assertEquals(10 * 50000 / 100 + 3 * 2000 / 100 + 3 * 2000 / 100
+					+ 10 * (20 * 54000 / 100) / 100
+					+ 10 * (20 * 64800/ 100) / 100
+					+ 10 * (20 * 77760 / 100) / 100
+					+ 7 * (100000 - 93312) / 100, c.vat);
+	}
 }
