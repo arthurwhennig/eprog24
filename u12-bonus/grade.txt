@@ -1,0 +1,610 @@
+NETHZ: ahennig
+
+Total Points: 2.75
+Total Percentage: 55%
+
+Timeout: YES
+
+test01ToEBNFString01: PASS
+test01ToEBNFString02: PASS
+test01ToEBNFString03: PASS
+test02ToEBNFString01: PASS
+test02ToEBNFString02: PASS
+test02ToEBNFString03: PASS
+test03EasyShortestWords01: FAIL
+test03EasyShortestWords02: FAIL
+test04MediumShortestWords01: FAIL
+test04MediumShortestWords02: FAIL
+test05HardShortestWords01: FAIL
+test05HardShortestWords02: FAIL
+test05HardShortestWords03: PASS
+test05HardShortestWords04: FAIL
+test05HardShortestWords05: FAIL
+test05HardShortestWords06: FAIL
+test06UndefinedRuleName01: PASS
+test06UndefinedRuleName02: PASS
+test06UndefinedRuleName03: PASS
+test06UndefinedRuleName04: PASS
+
+
+Folgende Test-Datei wurde für die Bewertung verwendet:
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.*;
+
+import org.junit.jupiter.api.Test;
+
+public class GradingEBNFRulesTest {
+	
+	public EBNFNode createLinkedSequence(EBNFNode[] nodes) {
+        EBNFNode seq = nodes[0];
+        for (int i=1; i<nodes.length; ++i) {
+        	seq = new Sequence(seq, nodes[i]);
+        }
+        return seq;
+    }
+	
+    public EBNFNode createLinkedSequence(String word) {
+    	
+    	EBNFNode[] nodes = new EBNFNode[word.length()];
+    	for (int i=0; i<word.length(); ++i) {
+    		nodes[i] = new Literal(word.charAt(i));
+    	}
+    	
+        return createLinkedSequence(nodes);
+    }
+    
+    public EBNFNode createLinkedAlternative(EBNFNode[] nodes) {
+        EBNFNode alt = nodes[0];
+        for (int i=1; i<nodes.length; ++i) {
+        	alt = new Alternative(alt, nodes[i]);
+        }
+        return alt;
+    }
+	
+    public EBNFNode createLinkedAlternative(String word) {
+    	
+    	EBNFNode[] nodes = new EBNFNode[word.length()];
+    	for (int i=0; i<word.length(); ++i) {
+    		nodes[i] = new Literal(word.charAt(i));
+    	}
+    	
+        return createLinkedAlternative(nodes);
+    }
+
+    public EBNFRules expressionRules() {
+    	
+    	EBNFNode _digit = new RuleName("digit");
+    	EBNFNode _number = new RuleName("number");
+    	EBNFNode _operator = new RuleName("operator");
+    	
+    	
+    	EBNFNode digit = new Alternative(new Literal('0'), new Literal('1'));
+    	EBNFNode number = new Sequence(_digit, new Repetition(_digit));
+    	EBNFNode operator = new Alternative(new Literal('+'), new Literal('-'));
+    	EBNFNode expr = new Sequence(new Sequence(_number, new Sequence(_operator, _number)), new Repetition(new Sequence(_operator, _number)));
+    	
+    	Map<String, EBNFNode> map = new HashMap<>();
+        map.put("digit", digit);
+        map.put("number", number);
+        map.put("operator", operator);
+        map.put("expr", expr);
+        return new EBNFRules(map);
+    }
+    
+    public EBNFRules functionRules() {
+    	EBNFNode _data_type = new RuleName("data_type");
+		EBNFNode _fn_name = new RuleName("fn_name");
+		EBNFNode _arg_name = new RuleName("arg_name");
+		EBNFNode _arg = new RuleName("arg");
+		
+		EBNFNode data_type = new Alternative(createLinkedSequence("int"), createLinkedSequence("float"));
+		EBNFNode fn_name = new Sequence(new Alternative(createLinkedSequence("fn"), createLinkedSequence("func")), new Option(new Literal('1')));
+		EBNFNode arg_name = new Sequence(createLinkedSequence("arg"), createLinkedAlternative("12"));
+		EBNFNode arg = createLinkedSequence(new EBNFNode[] {_data_type, new Literal(' '), _arg_name});
+    	
+    	EBNFNode function = createLinkedSequence(new EBNFNode[] {
+    			_data_type, 
+    			new Literal(' '), _fn_name, 
+    			new Literal('('), 
+    			new Option(_arg), 
+    			new Literal(')')
+    	});
+    	
+    	
+    	Map<String, EBNFNode> map = new HashMap<>();
+        map.put("data_type", data_type);
+        map.put("fn_name", fn_name);
+        map.put("arg_name", arg_name);
+        map.put("arg", arg);
+        map.put("function", function);
+        return new EBNFRules(map);
+    }
+
+    @Test
+    public void test01ToEBNFString01() {
+    	// basic tests
+    	assertEquals(new Epsilon().toEBNFString(), "");    	
+    	assertEquals(new Literal('a').toEBNFString(), "a");
+    	assertEquals(new RuleName("myrule").toEBNFString(), "<myrule>");
+    	assertEquals(new Brackets(new Literal('b')).toEBNFString(), "(b)");
+    	assertEquals(new Option(new Literal('c')).toEBNFString(), "[c]");
+    	assertEquals(new Repetition(new Literal('d')).toEBNFString(),  "{d}");
+    	assertEquals(new Sequence(new Literal('e'), new Literal('f')).toEBNFString(), "ef");
+    	assertEquals(new Alternative(new Literal('g'), new Literal('h')).toEBNFString(), "g|h");
+    }
+    
+    @Test
+    public void test01ToEBNFString02() {
+    	// simple tests for special case of Alternative as part of Sequence
+    	EBNFNode ab = new Alternative(new Literal('a'), new Literal('b'));
+    	assertEquals(ab.toEBNFString(), "a|b");
+    	assertEquals(new Sequence(ab, new Literal('x')).toEBNFString(), "(a|b)x");
+    	assertEquals(new Sequence(new Literal('x'), ab).toEBNFString(), "x(a|b)");
+    }
+    
+    @Test
+    public void test01ToEBNFString03() {
+    	EBNFNode xy = new Alternative(new Literal('x'), new Literal('y'));
+    	// more complicated tests for special case of Alternative as part of Sequence
+    	assertEquals(xy.toEBNFString(), "x|y");
+    	assertEquals(new Sequence(xy, xy).toEBNFString(), "(x|y)(x|y)");
+    	assertEquals(new Sequence(xy, new Repetition(xy)).toEBNFString(), "(x|y){x|y}");
+    	assertEquals(new Sequence(new Option(xy), new Brackets(xy)).toEBNFString(), "[x|y](x|y)");
+    }
+    
+    @Test
+    public void test02ToEBNFString01() {
+    	// test for EBNFRules toEBNFString method if rules are already sorted.
+    	
+    	Map<String, EBNFNode> map = new HashMap<>();
+        map.put("a_rule", new Sequence(new Literal('a'), new Repetition(new Literal('b'))));
+        map.put("b_rule", new Sequence(new Repetition(new RuleName("a_rule")), new Option(new Literal('!'))));
+        map.put("c_rule", new Alternative(new Literal('c'), new RuleName("b_rule")));
+        EBNFRules rules = new EBNFRules(map);
+        
+        String expected_result = 
+        "<a_rule><-a{b}\n" + 
+        "<b_rule><-{<a_rule>}[!]\n" + 
+        "<c_rule><-c|<b_rule>\n";
+        
+        assertEquals(rules.toEBNFString(), expected_result);
+    	
+    }
+    
+    @Test
+    public void test02ToEBNFString02() {
+    	// test for EBNFRules toEBNFString method if rules are not already sorted.
+        EBNFRules rules = expressionRules();
+        
+        String expected_result = 
+        "<digit><-0|1\n" +
+        "<expr><-<number><operator><number>{<operator><number>}\n" +
+        "<number><-<digit>{<digit>}\n" + 
+        "<operator><-+|-\n";
+        
+        assertEquals(rules.toEBNFString(), expected_result);
+    	
+    }
+    
+    @Test
+    public void test02ToEBNFString03() {
+    	// test for EBNFRules toEBNFString method if rules are not already sorted.
+    	
+        EBNFRules rules = functionRules();
+        
+        String expected_result = 
+        "<arg><-<data_type> <arg_name>\n" +
+        "<arg_name><-arg(1|2)\n" +
+        "<data_type><-int|float\n" +
+        "<fn_name><-(fn|func)[1]\n" +
+        "<function><-<data_type> <fn_name>([<arg>])\n";
+        
+        assertEquals(rules.toEBNFString(), expected_result);
+    	    	
+    }
+    
+    @Test
+    public void test03EasyShortestWords01() {
+    	// test getShortestWords for very simple cases
+    	
+    	Map<String, EBNFNode> map = new HashMap<>();
+    	map.put("rule1", new Epsilon());
+    	map.put("rule2", new Literal('a'));
+    	map.put("rule3", new Brackets(new Literal('b')));
+    	map.put("rule4", new Option(new Literal('c')));
+    	map.put("rule5", new Alternative(new Literal('d'), new Literal('e')));
+    	EBNFRules rules = new EBNFRules(map);
+    	
+    	assertTrue(rules.getShortestWords("rule1", 0).equals(new HashSet<>(Arrays.asList(""))));
+    	assertTrue(rules.getShortestWords("rule2", 1).equals(new HashSet<>(Arrays.asList("a"))));
+    	assertTrue(rules.getShortestWords("rule3", 1).equals(new HashSet<>(Arrays.asList("b"))));
+    	assertTrue(rules.getShortestWords("rule4", 1).equals(new HashSet<>(Arrays.asList("", "c"))));
+    	assertTrue(rules.getShortestWords("rule5", 1).equals(new HashSet<>(Arrays.asList("d", "e"))));
+    }
+    
+    @Test
+    public void test03EasyShortestWords02() {
+    	// test getShortestWords for combined simple cases
+    	
+    	Map<String, EBNFNode> map = new HashMap<>();
+    	map.put("rule", new Alternative(new Literal('a'), new Alternative(new Alternative(new Epsilon(), new Brackets(new Literal('b'))), new Option(new Literal('c')))));
+    	EBNFRules rules = new EBNFRules(map);
+    	
+    	assertTrue(rules.getShortestWords("rule", 10).equals(new HashSet<>(Arrays.asList("", "a", "b", "c"))));
+    }
+    
+    @Test
+    public void test04MediumShortestWords01() {
+    	// test getShortestWords for more complicated cases
+    	
+    	Map<String, EBNFNode> map = new HashMap<>();
+    	map.put("rule1", new Sequence(new Literal('a'), new Literal('b')));
+    	map.put("rule2", new Repetition(new Literal('a')));
+    	map.put("rule3", new RuleName("rule2"));
+    	map.put("rule4", new Alternative(new RuleName("rule1"), new RuleName("rule3")));
+    	EBNFRules rules = new EBNFRules(map);
+    	
+    	assertTrue(rules.getShortestWords("rule1", 2).equals(new HashSet<>(Arrays.asList("ab"))));
+    	
+    	assertTrue(rules.getShortestWords("rule2", 0).equals(new HashSet<>(Arrays.asList(""))));
+    	assertTrue(rules.getShortestWords("rule2", 1).equals(new HashSet<>(Arrays.asList("", "a"))));
+    	assertTrue(rules.getShortestWords("rule2", 5).equals(new HashSet<>(Arrays.asList("", "a", "aa", "aaa", "aaaa", "aaaaa"))));
+    	
+    	assertTrue(rules.getShortestWords("rule3", 0).equals(new HashSet<>(Arrays.asList(""))));
+    	assertTrue(rules.getShortestWords("rule3", 1).equals(new HashSet<>(Arrays.asList("", "a"))));
+    	assertTrue(rules.getShortestWords("rule3", 5).equals(new HashSet<>(Arrays.asList("", "a", "aa", "aaa", "aaaa", "aaaaa"))));
+    	
+    	assertTrue(rules.getShortestWords("rule4", 0).equals(new HashSet<>(Arrays.asList(""))));
+    	assertTrue(rules.getShortestWords("rule4", 1).equals(new HashSet<>(Arrays.asList("", "a"))));
+    	assertTrue(rules.getShortestWords("rule4", 2).equals(new HashSet<>(Arrays.asList("", "a", "aa", "ab"))));
+    	assertTrue(rules.getShortestWords("rule4", 5).equals(new HashSet<>(Arrays.asList("", "a", "aa", "ab", "aaa", "aaaa", "aaaaa"))));
+    }
+    
+    @Test
+    public void test04MediumShortestWords02() {
+    	
+    	// test getShortestWords for more complicated cases
+    	
+    	Map<String, EBNFNode> map = new HashMap<>();
+    	map.put("as", new Sequence(new Literal('a'), new Repetition(new Literal('a'))));
+    	map.put("bs", new Sequence(new Repetition(new Literal('b')), new Literal('b')));
+    	map.put("rule", new Repetition(new Alternative(new RuleName("as"), new RuleName("bs"))));
+    	EBNFRules rules = new EBNFRules(map);
+    	
+    	assertTrue(rules.getShortestWords("as", 1).equals(new HashSet<>(Arrays.asList("a"))));
+    	assertTrue(rules.getShortestWords("as", 3).equals(new HashSet<>(Arrays.asList("a", "aa", "aaa"))));
+    
+    	assertTrue(rules.getShortestWords("bs", 1).equals(new HashSet<>(Arrays.asList("b"))));
+    	assertTrue(rules.getShortestWords("bs", 2).equals(new HashSet<>(Arrays.asList("b", "bb"))));
+    	
+    	assertTrue(rules.getShortestWords("rule", 0).equals(new HashSet<>(Arrays.asList(""))));
+    	assertTrue(rules.getShortestWords("rule", 1).equals(new HashSet<>(Arrays.asList("", "a", "b"))));
+    	assertTrue(rules.getShortestWords("rule", 2).equals(new HashSet<>(Arrays.asList("", "a", "b", "aa", "ab", "ba", "bb"))));
+    	assertTrue(rules.getShortestWords("rule", 3).equals(new HashSet<>(Arrays.asList("", "a", "b", "aa", "ab", "ba", "bb", "aaa", "aab", "aba", "abb", "baa", "bab", "bba", "bbb"))));
+    	
+    	
+    	
+    }
+    
+    @Test
+    public void test05HardShortestWords01() {
+    	
+    	// test getShortestWords for complicated cases including edge cases
+    	
+    	Map<String, EBNFNode> map = new HashMap<>();
+    	map.put("as", new Sequence(new Literal('a'), new Repetition(new Literal('a'))));
+    	map.put("bs", new Repetition(new Literal('b')));
+    	map.put("rule", new Repetition(new Alternative(new RuleName("as"), new RuleName("bs"))));
+    	EBNFRules rules = new EBNFRules(map);
+    	
+    	assertTrue(rules.getShortestWords("as", 1).equals(new HashSet<>(Arrays.asList("a"))));
+    	assertTrue(rules.getShortestWords("as", 3).equals(new HashSet<>(Arrays.asList("a", "aa", "aaa"))));
+    	
+    	assertTrue(rules.getShortestWords("bs", 0).equals(new HashSet<>(Arrays.asList(""))));
+    	assertTrue(rules.getShortestWords("bs", 1).equals(new HashSet<>(Arrays.asList("", "b"))));
+    	assertTrue(rules.getShortestWords("bs", 2).equals(new HashSet<>(Arrays.asList("", "b", "bb"))));
+    	
+    	assertTrue(rules.getShortestWords("rule", 0).equals(new HashSet<>(Arrays.asList(""))));
+    	assertTrue(rules.getShortestWords("rule", 1).equals(new HashSet<>(Arrays.asList("", "a", "b"))));
+    	assertTrue(rules.getShortestWords("rule", 2).equals(new HashSet<>(Arrays.asList("", "a", "b", "aa", "ab", "ba", "bb"))));
+    	assertTrue(rules.getShortestWords("rule", 3).equals(new HashSet<>(Arrays.asList("", "a", "b", "aa", "ab", "ba", "bb", "aaa", "aab", "aba", "abb", "baa", "bab", "bba", "bbb"))));
+    	
+    }
+    
+    @Test
+    public void test05HardShortestWords02() {
+    	EBNFRules rules = expressionRules();
+    	
+    	assertTrue(rules.getShortestWords("expr", 0).equals(new HashSet<>()));
+    	assertTrue(rules.getShortestWords("expr", 2).equals(new HashSet<>()));
+    	assertTrue(rules.getShortestWords("expr", 3).equals(new HashSet<>(Arrays.asList("0+0", "0+1", "0-0", "0-1", "1+0", "1+1", "1-0", "1-1"))));
+    	assertTrue(rules.getShortestWords("expr", 5).equals(new HashSet<>(Arrays.asList("0+1-0",
+    	    	"0+0+0",
+    	    	"0+1-1",
+    	    	"0+0+1",
+    	    	"11-00",
+    	    	"11-01",
+    	    	"1-00",
+    	    	"1-01",
+    	    	"011+1",
+    	    	"011+0",
+    	    	"0-0-1",
+    	    	"0-0-0",
+    	    	"1+000",
+    	    	"1+001",
+    	    	"101+1",
+    	    	"10-1",
+    	    	"10-0",
+    	    	"101+0",
+    	    	"10+00",
+    	    	"11-11",
+    	    	"10+01",
+    	    	"11-10",
+    	    	"0+01",
+    	    	"1-11",
+    	    	"000+1",
+    	    	"0+00",
+    	    	"1-10",
+    	    	"001-0",
+    	    	"000+0",
+    	    	"001-1",
+    	    	"00+10",
+    	    	"01+0",
+    	    	"1+011",
+    	    	"00+11",
+    	    	"01+1",
+    	    	"1+010",
+    	    	"1+1+0",
+    	    	"1+1+1",
+    	    	"1-0+1",
+    	    	"1-0+0",
+    	    	"1-1-1",
+    	    	"1-1-0",
+    	    	"0+0-0",
+    	    	"0+0-1",
+    	    	"10-10",
+    	    	"10-11",
+    	    	"011-0",
+    	    	"0-110",
+    	    	"0+10",
+    	    	"0+11",
+    	    	"0-111",
+    	    	"010+1",
+    	    	"010+0",
+    	    	"011-1",
+    	    	"01+11",
+    	    	"1+100",
+    	    	"01+10",
+    	    	"1-001",
+    	    	"1-000",
+    	    	"00-01",
+    	    	"1+0",
+    	    	"00-00",
+    	    	"1+1",
+    	    	"1+101",
+    	    	"000-0",
+    	    	"0-101",
+    	    	"0-100",
+    	    	"000-1",
+    	    	"00+1",
+    	    	"01+01",
+    	    	"1+110",
+    	    	"01+00",
+    	    	"1+111",
+    	    	"01-0",
+    	    	"00+0",
+    	    	"01-1",
+    	    	"1-011",
+    	    	"1-010",
+    	    	"110-0",
+    	    	"1-1+1",
+    	    	"110-1",
+    	    	"1-1+0",
+    	    	"0-1+0",
+    	    	"11+00",
+    	    	"0-1+1",
+    	    	"11+01",
+    	    	"010-1",
+    	    	"010-0",
+    	    	"0-011",
+    	    	"0-010",
+    	    	"1+00",
+    	    	"0+110",
+    	    	"1+01",
+    	    	"0+111",
+    	    	"11+1",
+    	    	"1-101",
+    	    	"11+0",
+    	    	"1-100",
+    	    	"1-0",
+    	    	"0+0",
+    	    	"1-1",
+    	    	"0+1",
+    	    	"100-1",
+    	    	"100-0",
+    	    	"11+11",
+    	    	"11+10",
+    	    	"10-01",
+    	    	"10-00",
+    	    	"0-01",
+    	    	"0-000",
+    	    	"0-00",
+    	    	"1+11",
+    	    	"0-001",
+    	    	"0+100",
+    	    	"0+101",
+    	    	"1+10",
+    	    	"00-1",
+    	    	"1-111",
+    	    	"1-110",
+    	    	"00-0",
+    	    	"00-10",
+    	    	"00-11",
+    	    	"1+0-1",
+    	    	"110+0",
+    	    	"111-1",
+    	    	"111-0",
+    	    	"1+0-0",
+    	    	"110+1",
+    	    	"0-0+1",
+    	    	"0-0+0",
+    	    	"0-1-1",
+    	    	"0+1+0",
+    	    	"10+10",
+    	    	"0+1+1",
+    	    	"10+11",
+    	    	"0-10",
+    	    	"0-11",
+    	    	"0+010",
+    	    	"0+011",
+    	    	"0-1-0",
+    	    	"01-10",
+    	    	"00+00",
+    	    	"10+0",
+    	    	"10+1",
+    	    	"11-1",
+    	    	"0-0",
+    	    	"11-0",
+    	    	"0-1",
+    	    	"00+01",
+    	    	"01-11",
+    	    	"101-0",
+    	    	"100+1",
+    	    	"100+0",
+    	    	"101-1",
+    	    	"001+0",
+    	    	"0+000",
+    	    	"001+1",
+    	    	"0+001",
+    	    	"1-0-0",
+    	    	"01-01",
+    	    	"01-00",
+    	    	"1+0+1",
+    	    	"1+1-0",
+    	    	"1+0+0",
+    	    	"1+1-1",
+    	    	"111+1",
+    	    	"1-0-1",
+    	    	"111+0"))));
+    	
+    	
+    }
+
+    @Test
+    public void test05HardShortestWords03() {
+    	EBNFRules rules = functionRules();
+    	
+    	assertTrue(rules.getShortestWords("function", 0).equals(new HashSet<>()));
+    	assertTrue(rules.getShortestWords("function", 7).equals(new HashSet<>()));
+    	assertTrue(rules.getShortestWords("function", 8).equals(new HashSet<>(Arrays.asList("int fn()"))));
+    	assertTrue(rules.getShortestWords("function", 9).equals(new HashSet<>(Arrays.asList("int fn()", "int fn1()"))));
+    	assertTrue(rules.getShortestWords("function", 12).equals(new HashSet<>(Arrays.asList("float fn1()", "float func()", "int fn()", "float fn()", "int fn1()", "int func1()", "int func()"))));
+    	assertTrue(rules.getShortestWords("function", 16).equals(new HashSet<>(Arrays.asList("float func1()", "float fn1()", "float func()", "int fn()", "float fn()", "int fn1()", "int func1()", "int func()", "int fn(int arg1)", "int fn(int arg2)"))));
+    	
+    }
+    
+    @Test
+    public void test05HardShortestWords04() {
+    	
+    	Map<String, EBNFNode> map = new HashMap<>();
+    	map.put("rule", new Sequence(new Repetition(new Option(new Literal('x'))), new Repetition(new Repetition(new Literal('x')))));
+    	EBNFRules rules = new EBNFRules(map);
+    	
+    	assertTrue(rules.getShortestWords("rule", 0).equals(new HashSet<>(Arrays.asList(""))));
+    	assertTrue(rules.getShortestWords("rule", 1).equals(new HashSet<>(Arrays.asList("", "x"))));
+    	assertTrue(rules.getShortestWords("rule", 4).equals(new HashSet<>(Arrays.asList("", "x", "xx", "xxx", "xxxx"))));
+    	
+    }
+    
+    @Test
+    public void test05HardShortestWords05() {
+    	
+    	Map<String, EBNFNode> map = new HashMap<>();
+    	map.put("rule", new Repetition(new Alternative(new Epsilon(), new Sequence(new Literal('a'), new Literal('b')))));
+    	EBNFRules rules = new EBNFRules(map);
+    	
+    	assertTrue(rules.getShortestWords("rule", 0).equals(new HashSet<>(Arrays.asList(""))));
+    	assertTrue(rules.getShortestWords("rule", 1).equals(new HashSet<>(Arrays.asList(""))));
+    	assertTrue(rules.getShortestWords("rule", 2).equals(new HashSet<>(Arrays.asList("", "ab"))));
+    	assertTrue(rules.getShortestWords("rule", 3).equals(new HashSet<>(Arrays.asList("", "ab"))));
+    	assertTrue(rules.getShortestWords("rule", 4).equals(new HashSet<>(Arrays.asList("", "ab", "abab"))));
+    	
+    }
+    
+    @Test
+    public void test05HardShortestWords06() {
+    	
+    	Map<String, EBNFNode> map = new HashMap<>();
+    	map.put("ab", new Sequence(new Literal('a'), new Literal('b')));
+    	map.put("xory", new Alternative(new Literal('x'), new Literal('y')));
+    	map.put("string", new Repetition(new Option(new Alternative(new RuleName("ab"), new RuleName("xory")))));
+    	map.put("strings", new Repetition(new RuleName("string")));
+    	EBNFRules rules = new EBNFRules(map);
+    	
+    	assertTrue(rules.getShortestWords("string", 0).equals(new HashSet<>(Arrays.asList(""))));
+    	assertTrue(rules.getShortestWords("string", 1).equals(new HashSet<>(Arrays.asList("", "x", "y"))));
+    	assertTrue(rules.getShortestWords("string", 2).equals(new HashSet<>(Arrays.asList("", "x", "y", "ab", "xx", "xy", "yx", "yy"))));
+    	
+    	assertTrue(rules.getShortestWords("strings", 0).equals(new HashSet<>(Arrays.asList(""))));
+    	assertTrue(rules.getShortestWords("strings", 1).equals(new HashSet<>(Arrays.asList("", "x", "y"))));
+    	assertTrue(rules.getShortestWords("strings", 2).equals(new HashSet<>(Arrays.asList("", "x", "y", "ab", "xx", "xy", "yx", "yy"))));
+    	
+    }
+    
+    @Test
+    public void test06UndefinedRuleName01() {
+    	
+    	EBNFRules rules = functionRules();
+    	
+    	assertThrows(IllegalEBNFDescriptionException.class, () -> rules.getShortestWords("func", 0));
+    	assertThrows(IllegalEBNFDescriptionException.class, () -> rules.getShortestWords("fun", 10));
+    	assertThrows(IllegalEBNFDescriptionException.class, () -> rules.getShortestWords("Function", 100));
+    	
+    }
+    
+    @Test
+    public void test06UndefinedRuleName02() {
+    	
+    	EBNFRules rules = expressionRules();
+    	
+    	assertThrows(IllegalEBNFDescriptionException.class, () -> rules.getShortestWords("Expr", 0));
+    	assertThrows(IllegalEBNFDescriptionException.class, () -> rules.getShortestWords("expression", 10));
+    	
+    }
+    
+    @Test
+    public void test06UndefinedRuleName03() {
+    	
+    	Map<String, EBNFNode> map = new HashMap<>();
+    	map.put("a", new Literal('a'));
+    	map.put("b", new Literal('b'));
+    	map.put("rule1", new RuleName("c"));
+    	map.put("rule2", new RuleName("rule1"));
+    	EBNFRules rules = new EBNFRules(map);
+    	
+    	assertThrows(IllegalEBNFDescriptionException.class, () -> rules.getShortestWords("c", 1));
+    	assertThrows(IllegalEBNFDescriptionException.class, () -> rules.getShortestWords("rule1", 7));
+    	assertThrows(IllegalEBNFDescriptionException.class, () -> rules.getShortestWords("rule2", 13));
+    	
+    }
+    
+    @Test
+    public void test06UndefinedRuleName04() {
+    	
+    	Map<String, EBNFNode> map = new HashMap<>();
+    	map.put("a", new Literal('a'));
+    	map.put("b", new Literal('b'));
+    	map.put("rule1", new Sequence(new RuleName("a"), new RuleName("c")));
+    	map.put("rule2", new Alternative(new Option(new RuleName("rule1")), new Repetition(new RuleName("b"))));
+    	EBNFRules rules = new EBNFRules(map);
+    	
+    	assertThrows(IllegalEBNFDescriptionException.class, () -> rules.getShortestWords("c", 1));
+    	assertThrows(IllegalEBNFDescriptionException.class, () -> rules.getShortestWords("rule1", 7));
+    	assertThrows(IllegalEBNFDescriptionException.class, () -> rules.getShortestWords("rule2", 13));
+    	
+    }
+}
