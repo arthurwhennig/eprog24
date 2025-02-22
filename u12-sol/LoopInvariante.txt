@@ -1,2 +1,0 @@
-Schreiben Sie hier Ihre Loop Invariante:
-al != null && al.length > 0 && sorted(al, 0, al.length-1) && (0 < next && next <= al.length && candidate == al[next-1]) && value > candidate

@@ -1,8 +1,0 @@
-1. Ungültig. Gegenbeispiel: x == 0 (y egal)
-2. Ungültig. Gegenbeispiel: x == 20
-3. Ungültig. Gegenbeispiel: x == 1
-4. Ungültig. Gegenbeispiel: x == 1
-5. Gültig.
-6. Ungültig. Gegenbeispiel: x == 11 (Wir können keine Aussage über y machen)
-7. Ungültig. Gegenbeispiel: x == 1, y == 1
-8. Gültig.
